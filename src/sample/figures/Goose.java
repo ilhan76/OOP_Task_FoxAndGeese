@@ -2,45 +2,45 @@ package sample.figures;
 
 import sample.gameFild.Cell;
 import sample.gameFild.LogicGameField;
+import java.util.ArrayList;
 
-import java.util.HashSet;
 
 public class Goose implements Figure {
-    private LogicGameField LGameField;
-    private Cell currentCell;
-    private HashSet<Cell> possibleMoves = new HashSet<>();
+    private LogicGameField gameField;
+    private Cell<Figure> currentCell;
+    private ArrayList<Cell<Figure>> possibleMoves = new ArrayList<>();
 
     public Goose(LogicGameField gameField) {
-        LGameField = gameField;
+        this.gameField = gameField;
     }
 
     @Override
-    public Cell getCurrentCell() {
+    public Cell<Figure> getCurrentCell() {
         return currentCell;
     }
 
     @Override
-    public void setCurrentCell(Cell cell) {
+    public void setCurrentCell(Cell<Figure> cell) {
         currentCell = cell;
     }
 
     @Override
-    public HashSet<Cell> getPossibleMoves() {
+    public ArrayList<Cell<Figure>> getPossibleMoves() {
         return possibleMoves;
     }
 
     @Override
-    public void setPossibleMoves(HashSet<Cell> newSet) {
+    public void setPossibleMoves(ArrayList<Cell<Figure>> newSet) {
         possibleMoves = newSet;
     }
 
     @Override
     public LogicGameField getField() {
-        return LGameField;
+        return gameField;
     }
 
     @Override
     public void setField(LogicGameField logicGameField) {
-        LGameField = logicGameField;
+        gameField = logicGameField;
     }
 }

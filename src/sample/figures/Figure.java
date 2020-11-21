@@ -2,14 +2,14 @@ package sample.figures;
 
 import sample.gameFild.Cell;
 import sample.gameFild.LogicGameField;
+import java.util.ArrayList;
 
-import java.util.HashSet;
 
 public interface Figure {
-    Cell getCurrentCell();
-    void setCurrentCell(Cell cell);
-    HashSet<Cell> getPossibleMoves();
-    void setPossibleMoves(HashSet<Cell> newSet);
+    Cell<Figure> getCurrentCell();
+    void setCurrentCell(Cell<Figure> cell);
+    ArrayList<Cell<Figure>> getPossibleMoves();
+    void setPossibleMoves(ArrayList<Cell<Figure>> newSet);
     LogicGameField getField();
     void setField(LogicGameField logicGameField);
 }

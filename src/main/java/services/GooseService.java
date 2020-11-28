@@ -29,6 +29,8 @@ public class GooseService {
             if (c.getFigure() == null && gameField.getCellByFigure().get(goose).getY() - c.getY() >= 0) possibleMoves.add(c);
         }
         goose.setPossibleMoves(possibleMoves);
+        //System.out.println("Possible moves: " + goose.getPossibleMoves().toString());
+        //System.out.println();
     }
 
     public void randomMove(LogicGameField gameField){

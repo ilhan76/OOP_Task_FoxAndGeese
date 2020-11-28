@@ -42,8 +42,4 @@ public class Graph<T> {
     public TreeSet<Cell<T>> getCells(){
         return cells;
     }
-
-    private boolean isEquals(Cell<T> cell1, Cell<T> cell2){
-        return cell1.getX() == cell2.getX() && cell1.getY() == cell2.getY();
-    }
 }

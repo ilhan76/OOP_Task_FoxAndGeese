@@ -2,7 +2,7 @@ package gameFild;
 
 import figures.Fox;
 
-import java.util.Objects;
+
 import java.util.TreeSet;
 
 public class Cell<Figure> implements Comparable<Cell<Figure>> {
@@ -69,11 +69,6 @@ public class Cell<Figure> implements Comparable<Cell<Figure>> {
             Cell<Figure> cell = (Cell<Figure>) obj;
             return this.y == cell.y && this.x == cell.x;
         }
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(figure, y, x, adjCell);
     }
 
     @Override

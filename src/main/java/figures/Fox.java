@@ -2,7 +2,6 @@ package figures;
 
 import gameFild.Cell;
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.TreeMap;
 
 public class Fox implements Figure {
@@ -25,15 +24,6 @@ public class Fox implements Figure {
 
     public void setPossibleBeat(TreeMap<Cell<Figure>, Goose> possibleBeat) {
         this.possibleBeat = possibleBeat;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Fox fox = (Fox) o;
-        return Objects.equals(possibleMoves, fox.possibleMoves) &&
-                Objects.equals(possibleBeat, fox.possibleBeat);
     }
 
     @Override

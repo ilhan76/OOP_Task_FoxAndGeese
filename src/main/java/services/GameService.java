@@ -1,14 +1,10 @@
 package services;
 
-import org.codehaus.jackson.map.ObjectMapper;
 import process.GameProcess;
-
-import java.io.File;
-import java.io.IOException;
 
 
 public class GameService {
-    public void startRandomGameProcess(GameProcess gameProcess) throws InterruptedException, IOException {
+    public void startRandomGameProcess(GameProcess gameProcess) {
         FieldService fieldService = new FieldService();
         FoxService foxService = new FoxService();
         GooseService gooseService = new GooseService();
@@ -26,12 +22,10 @@ public class GameService {
                 if (gooseService.isLoss(gameProcess.getGameField()) || foxService.isPassiveWin(gameProcess.getGameField()))
                     gameProcess.setFoxWin(true);
             }
-            Thread.sleep(2000);
+
+            //Thread.sleep(2000);
             gameProcess.setMoveFox(!gameProcess.isMoveFox());
         }
         fieldService.printWinner(gameProcess);
-        //ObjectMapper om = new ObjectMapper();
-        //String json = om.writeValueAsString(gameProcess);
-        //om.writeValue(new File("target/field.json"), gameProcess);
     }
 }

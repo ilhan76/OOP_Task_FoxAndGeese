@@ -48,13 +48,13 @@ public class FoxService {
 
         for (Cell<Figure> curCell :
                 gameField.getCellByFigure().get(fox).getAdjCell()) {
-            findMoveByDirection(possibleMoves, possibleBeat, curCell, findDirection(curCell, gameField.getCellByFigure().get(fox)));
+            findMoveByDirection(possibleMoves, possibleBeat, curCell, findDirection(curCell, gameField.getCellByFigure().get(fox)), false);
         }
         fox.setPossibleMoves(possibleMoves);
         fox.setPossibleBeat(possibleBeat);
-        //System.out.println("Possible moves: " + fox.getPossibleMoves().toString());
-        //System.out.println("Possible beat: " + fox.getPossibleBeat().keySet().toString());
-        //System.out.println();
+        System.out.println("Possible moves: " + fox.getPossibleMoves().toString());
+        System.out.println("Possible beat: " + fox.getPossibleBeat().keySet().toString());
+        System.out.println();
     }
 
     private Cell<Figure> getSellWithDirection(TreeSet<Cell<Figure>> cells, Cell<Figure> to, Direction direction){
@@ -81,15 +81,22 @@ public class FoxService {
         }
     }
 
-    private void findMoveByDirection(ArrayList<Cell<Figure>> possibleMoves, TreeMap<Cell<Figure>, Goose> possibleBeat, Cell<Figure> cell, Direction d){
+    private void findMoveByDirection(ArrayList<Cell<Figure>> pMoves, TreeMap<Cell<Figure>, Goose> pBeat,
+                                     Cell<Figure> cell, Direction d, boolean alreadyBeaten){
         Cell<Figure> nextCell = getSellWithDirection(cell.getAdjCell(), cell, d);
         if (cell.getFigure() == null) {
-            possibleMoves.add(cell);
+            if (!alreadyBeaten){
+                pMoves.add(cell);
+            } else{
+                Goose g = pBeat.get(pBeat.lastKey());
+                pBeat.put(cell, g);
+                alreadyBeaten = true;
+            }
             if (nextCell != null)
-                findMoveByDirection(possibleMoves, possibleBeat, nextCell, d);
+                findMoveByDirection(pMoves, pBeat, nextCell, d, alreadyBeaten);
         } else if (nextCell != null && cell.getFigure().getClass() == Goose.class && nextCell.getFigure() == null){
-            possibleBeat.put(nextCell, (Goose) cell.getFigure());
-            findMoveByDirection(possibleMoves, possibleBeat, nextCell, d);
+            pBeat.put(nextCell, (Goose) cell.getFigure());
+            findMoveByDirection(pMoves, pBeat, nextCell, d, true);
         }
     }
 

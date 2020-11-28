@@ -58,8 +58,8 @@ public class FieldService {
         for (Cell<Figure> c :
                 gameField.getCells()) {
             if (c.getFigure() != null) {
-                if (c.getFigure().getClass() == Fox.class) gameField.addFox((Fox) c.getFigure());
-                else gameField.addGoose((Goose) c.getFigure());
+                if (c.getFigure().getClass() == Fox.class) gameField.getFoxes().add((Fox) c.getFigure());
+                else gameField.getGeese().add((Goose) c.getFigure());
             }
         }
         return gameField;

@@ -7,6 +7,7 @@ import figures.Goose;
 import gameFild.Cell;
 import gameFild.Direction;
 import gameFild.LogicGameField;
+import graphics.ConsoleOutputType;
 
 import java.util.ArrayList;
 import java.util.TreeMap;
@@ -27,15 +28,17 @@ public class FoxService {
                 break;
             }
         }
-        if (isBeat){
+        if (isBeat) {
             gameField.getGeese().remove(fox.getPossibleBeat().get(nextCell));
 
             Cell<Figure> cell = gameField.getCellByFigure().get(fox.getPossibleBeat().get(nextCell));
             cell.setFigure(null);
 
             findPossibleMoves(fox, gameField);
+            FieldService fieldService = new FieldService();
+            fieldService.printField(gameField, ConsoleOutputType.FOX);
             canContinue = fox.getPossibleBeat().size() != 0;
-            if (canContinue){
+            if (canContinue) {
                 Cell<Figure> nCell = fox.getPossibleBeat().firstKey();
                 move(gameField, nCell, fox, true);
             }
@@ -57,7 +60,7 @@ public class FoxService {
         System.out.println();
     }
 
-    private Cell<Figure> getSellWithDirection(TreeSet<Cell<Figure>> cells, Cell<Figure> to, Direction direction){
+    private Cell<Figure> getSellWithDirection(TreeSet<Cell<Figure>> cells, Cell<Figure> to, Direction direction) {
         for (Cell<Figure> cell :
                 cells) {
             if (findDirection(cell, to) == direction) return cell;
@@ -65,15 +68,15 @@ public class FoxService {
         return null;
     }
 
-    private Direction findDirection(Cell<Figure> from, Cell<Figure> to){
-        if (from.getY() - to.getY() == 0){
-            if (from.getX() - to.getX() > 0){
+    private Direction findDirection(Cell<Figure> from, Cell<Figure> to) {
+        if (from.getY() - to.getY() == 0) {
+            if (from.getX() - to.getX() > 0) {
                 return Direction.LEFT;
             } else {
                 return Direction.RIGHT;
             }
         } else {
-            if (from.getY() - to.getY() > 0){
+            if (from.getY() - to.getY() > 0) {
                 return Direction.DOWN;
             } else {
                 return Direction.UP;
@@ -82,34 +85,35 @@ public class FoxService {
     }
 
     private void findMoveByDirection(ArrayList<Cell<Figure>> pMoves, TreeMap<Cell<Figure>, Goose> pBeat,
-                                     Cell<Figure> cell, Direction d, boolean alreadyBeaten){
+                                     Cell<Figure> cell, Direction d, boolean alreadyBeaten) {
         Cell<Figure> nextCell = getSellWithDirection(cell.getAdjCell(), cell, d);
         if (cell.getFigure() == null) {
-            if (!alreadyBeaten){
+            if (!alreadyBeaten) {
                 pMoves.add(cell);
-            } else{
+            } else {
                 Goose g = pBeat.get(pBeat.lastKey());
                 pBeat.put(cell, g);
                 alreadyBeaten = true;
             }
             if (nextCell != null)
                 findMoveByDirection(pMoves, pBeat, nextCell, d, alreadyBeaten);
-        } else if (nextCell != null && cell.getFigure().getClass() == Goose.class && nextCell.getFigure() == null){
+        } else if (nextCell != null && cell.getFigure().getClass() == Goose.class && nextCell.getFigure() == null) {
             pBeat.put(nextCell, (Goose) cell.getFigure());
             findMoveByDirection(pMoves, pBeat, nextCell, d, true);
         }
     }
 
-    public void randomMove(LogicGameField gameField){
+    public void randomMove(LogicGameField gameField) {
         findPossibleMoves(gameField.getFoxes().get((int) (Math.random() * gameField.getFoxes().size())), gameField);
-        //if ((int)(Math.random() * 2) > 1)
-        if(gameField.getFoxes().get((int) (Math.random() * gameField.getFoxes().size())).getPossibleBeat().size() > 0)
+        FieldService fieldService = new FieldService();
+        fieldService.printField(gameField, ConsoleOutputType.FOX);
+        if (gameField.getFoxes().get((int) (Math.random() * gameField.getFoxes().size())).getPossibleBeat().size() > 0)
             beat(gameField);
         else
             move(gameField);
     }
 
-    private void move(LogicGameField gameField){
+    private void move(LogicGameField gameField) {
         Fox fox;
         ArrayList<Cell<Figure>> moves;
         do {
@@ -117,10 +121,11 @@ public class FoxService {
             moves = fox.getPossibleMoves();
         } while (moves.size() == 0);
 
-        Cell<Figure> nextCell = moves.get((int)(Math.random() * moves.size()));
+        Cell<Figure> nextCell = moves.get((int) (Math.random() * moves.size()));
         move(gameField, nextCell, fox, false);
     }
-    private void beat(LogicGameField gameField){
+
+    private void beat(LogicGameField gameField) {
         Fox fox;
         TreeMap<Cell<Figure>, Goose> moves;
         do {
@@ -129,23 +134,23 @@ public class FoxService {
         } while (moves.size() == 0);
 
         ArrayList<Cell<Figure>> listMoves = new ArrayList<>(moves.keySet());
-        Cell<Figure> nextCell = listMoves.get((int)(Math.random() * moves.size()));
+        Cell<Figure> nextCell = listMoves.get((int) (Math.random() * moves.size()));
         move(gameField, nextCell, fox, true);
     }
 
-    public boolean isPassiveWin(LogicGameField gameField){
+    public boolean isPassiveWin(LogicGameField gameField) {
         GooseService gs = new GooseService();
         for (Goose g :
                 gameField.getGeese()) {
             gs.findPossibleMoves(g, gameField);
-            if (!(g.getPossibleMoves().size() == 0)){
+            if (!(g.getPossibleMoves().size() == 0)) {
                 return false;
             }
         }
         return true;
     }
 
-    public boolean isLoss(LogicGameField gameField){
+    public boolean isLoss(LogicGameField gameField) {
         for (Fox f :
                 gameField.getFoxes()) {
             findPossibleMoves(f, gameField);

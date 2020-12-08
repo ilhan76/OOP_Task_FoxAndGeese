@@ -4,6 +4,7 @@ import figures.Figure;
 import figures.Goose;
 import gameFild.Cell;
 import gameFild.LogicGameField;
+import graphics.ConsoleOutputType;
 
 import java.util.ArrayList;
 
@@ -29,7 +30,7 @@ public class GooseService {
             if (c.getFigure() == null && gameField.getCellByFigure().get(goose).getY() - c.getY() >= 0) possibleMoves.add(c);
         }
         goose.setPossibleMoves(possibleMoves);
-        //System.out.println("Possible moves: " + goose.getPossibleMoves().toString());
+        //System.out.println("Possible moves (Geese): " + goose.getPossibleMoves().toString());
         //System.out.println();
     }
 
@@ -37,14 +38,20 @@ public class GooseService {
         Goose goose;
         ArrayList<Cell<Figure>> moves;
         if (gameField.getGeese().size() == 0) return;
+        for (Goose g :
+                gameField.getGeese()) {
+            findPossibleMoves(g, gameField);
+        }
         do {
             goose = gameField.getGeese().get((int) (Math.random() * gameField.getGeese().size()));
-            if (!gameField.getCellByFigure().containsKey(goose)){
-                System.out.println(gameField.getGeese());
-            }
-            findPossibleMoves(goose, gameField);
+            //if (!gameField.getCellByFigure().containsKey(goose)){
+            //    System.out.println(gameField.getGeese());
+            //}
+            //findPossibleMoves(goose, gameField);
             moves = goose.getPossibleMoves();
         } while (moves.size() == 0);
+        FieldService fieldService = new FieldService();
+        fieldService.printField(gameField, ConsoleOutputType.GOOSE);
 
         Cell<Figure> nextCell = moves.get((int)(Math.random() * moves.size()));
         move(gameField, nextCell, goose);

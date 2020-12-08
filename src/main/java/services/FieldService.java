@@ -1,5 +1,6 @@
 package services;
 
+import graphics.ConsoleOutputType;
 import process.GameProcess;
 import figures.Figure;
 import figures.Fox;
@@ -73,7 +74,8 @@ public class FieldService {
         else return new Fox();
     }
 
-    public void printField(LogicGameField gameField) {
+    public void printField(LogicGameField gameField, ConsoleOutputType type
+    ) {
         int counter = 0;
         System.out.println("==============================");
         for (Cell<Figure> c :
@@ -83,24 +85,49 @@ public class FieldService {
                 counter+=2;
             }
             counter++;
-            if ((c.getX() - 65 + c.getY()) % 2 == 0) System.out.print("\u001B[40m");
+            /*
+            if (canBeatCell(gameField.getFoxes(), c))
+                System.out.print("\u001B[41m");
+            else if (canMoveCell(gameField.getFoxes(), c))
+                System.out.print("\u001B[43m");
+            else */
+            if (type == ConsoleOutputType.FOX){
+                if (canBeatCell(gameField.getFoxes(), c))
+                    System.out.print("\u001B[41m");
+                else if (canMoveCell(gameField.getFoxes(), c))
+                    System.out.print("\u001B[43m");
+                else if ((c.getX() - 65 + c.getY()) % 2 == 0)
+                    System.out.print("\u001B[40m");
+                else
+                    System.out.print("\u001B[47m");
+
+            } else if (type == ConsoleOutputType.GOOSE){
+                if (canGooseMoveCell(gameField.getGeese(), c))
+                    System.out.print("\u001B[45m");
+                else if ((c.getX() - 65 + c.getY()) % 2 == 0)
+                    System.out.print("\u001B[40m");
+                else
+                    System.out.print("\u001B[47m");
+            }else if ((c.getX() - 65 + c.getY()) % 2 == 0)
+                System.out.print("\u001B[40m");
             else
                 System.out.print("\u001B[47m");
 
-            if (c.getFigure() != null) {
+            if (c.getFigure() == null) System.out.print("   ");
+            else {
                 if (c.getFigure().getClass() == Goose.class) System.out.print("\033[1;92m");
                 else System.out.print("\033[1;91m");
+                System.out.printf(" %s ", c.getFigure().getClass() == Fox.class ? 'F' : 'G');
             }
+            System.out.print("\033[0;150m");
 
-            if (c.getFigure() == null) System.out.print("   ");
-            else System.out.printf(" %s ", c.getFigure().getClass() == Fox.class ? 'F' : 'G');
             if (c.getX() == 'E' && (c.getY() == 0 || c.getY() == 1 || c.getY() == 5 || c.getY() == 6)){
-                System.out.print("\033[0;150m");
+                //System.out.print("\033[0;150m");
                 System.out.print("||||||");
                 counter+=2;
             }
             if (counter % 7 == 0) {
-                System.out.print("\033[0m");
+                //System.out.print("\033[0m");
                 System.out.println();
             }
         }
@@ -127,6 +154,14 @@ public class FieldService {
         for (Fox f :
                 foxes) {
             if (f.getPossibleMoves().contains(cell)) return true;
+        }
+        return false;
+    }
+
+    private boolean canGooseMoveCell(ArrayList<Goose> geese, Cell<Figure> cell){
+        for (Goose g :
+                geese) {
+            if (g.getPossibleMoves().contains(cell)) return true;
         }
         return false;
     }

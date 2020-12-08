@@ -7,6 +7,8 @@ import figures.Goose;
 import gameFild.Cell;
 import gameFild.LogicGameField;
 
+import java.util.ArrayList;
+
 public class FieldService {
 
     public LogicGameField makeGameField(int[][] matrix) {
@@ -112,5 +114,20 @@ public class FieldService {
         if (gameProcess.isFoxWin()) System.out.println("======== FOX IS THE WINNER ========");
         else System.out.println("======= GEESE ARE WINNER ==========");
         System.out.println("===================================");
+    }
+
+    private boolean canBeatCell(ArrayList<Fox> foxes, Cell<Figure> cell){
+        for (Fox f :
+                foxes) {
+            if (f.getPossibleBeat().containsKey(cell)) return true;
+        }
+        return false;
+    }
+    private boolean canMoveCell(ArrayList<Fox> foxes, Cell<Figure> cell){
+        for (Fox f :
+                foxes) {
+            if (f.getPossibleMoves().contains(cell)) return true;
+        }
+        return false;
     }
 }

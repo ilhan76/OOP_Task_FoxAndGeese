@@ -8,6 +8,7 @@ public class GameProcess {
     private boolean foxWin;
     private boolean geeseWin;
 
+    public GameProcess(){}
     public GameProcess(LogicGameField gameField){
         this.gameField = gameField;
         moveFox = false;

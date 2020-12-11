@@ -1,12 +1,20 @@
 package figures;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import gameFild.Cell;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
 public class Fox implements Figure {
-    private ArrayList<Cell<Figure>> possibleMoves = new ArrayList<>();
-    private TreeMap<Cell<Figure>, Goose> possibleBeat = new TreeMap<>();
+    //@JsonIgnore
+    private ArrayList<Cell<Figure>> possibleMoves;
+    //@JsonIgnore
+    private TreeMap<Cell<Figure>, Goose> possibleBeat;
+
+    public Fox(){
+        possibleMoves = new ArrayList<>();
+        possibleBeat = new TreeMap<>();
+    }
 
     @Override
     public ArrayList<Cell<Figure>> getPossibleMoves() {

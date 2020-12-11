@@ -52,7 +52,7 @@ public class FieldService {
             }
         }
         char[] delX = {'A', 'B', 'F', 'G'};
-        int[] delY = {0,  5, 1, 6};
+        int[] delY = {0, 5, 1, 6};
         for (int y : delY) {
             for (char x : delX) {
                 gameField.remove(new Cell<Figure>(null, x, y));
@@ -74,8 +74,7 @@ public class FieldService {
         else return new Fox();
     }
 
-    public void printField(LogicGameField gameField, ConsoleOutputType type
-    ) {
+    public void printField(LogicGameField gameField, ConsoleOutputType type) {
         int counter = 0;
         System.out.println("==============================");
         for (Cell<Figure> c :
@@ -85,12 +84,6 @@ public class FieldService {
                 counter+=2;
             }
             counter++;
-            /*
-            if (canBeatCell(gameField.getFoxes(), c))
-                System.out.print("\u001B[41m");
-            else if (canMoveCell(gameField.getFoxes(), c))
-                System.out.print("\u001B[43m");
-            else */
             if (type == ConsoleOutputType.FOX){
                 if (canBeatCell(gameField.getFoxes(), c))
                     System.out.print("\u001B[41m");
@@ -100,15 +93,16 @@ public class FieldService {
                     System.out.print("\u001B[40m");
                 else
                     System.out.print("\u001B[47m");
-
-            } else if (type == ConsoleOutputType.GOOSE){
+            }
+            else if (type == ConsoleOutputType.GOOSE){
                 if (canGooseMoveCell(gameField.getGeese(), c))
                     System.out.print("\u001B[45m");
                 else if ((c.getX() - 65 + c.getY()) % 2 == 0)
                     System.out.print("\u001B[40m");
                 else
                     System.out.print("\u001B[47m");
-            }else if ((c.getX() - 65 + c.getY()) % 2 == 0)
+            }
+            else if ((c.getX() - 65 + c.getY()) % 2 == 0)
                 System.out.print("\u001B[40m");
             else
                 System.out.print("\u001B[47m");
@@ -122,14 +116,10 @@ public class FieldService {
             System.out.print("\033[0;150m");
 
             if (c.getX() == 'E' && (c.getY() == 0 || c.getY() == 1 || c.getY() == 5 || c.getY() == 6)){
-                //System.out.print("\033[0;150m");
                 System.out.print("||||||");
                 counter+=2;
             }
-            if (counter % 7 == 0) {
-                //System.out.print("\033[0m");
-                System.out.println();
-            }
+            if (counter % 7 == 0) System.out.println();
         }
         System.out.println("==============================");
     }

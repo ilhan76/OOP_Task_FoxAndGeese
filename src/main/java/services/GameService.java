@@ -1,19 +1,11 @@
 package services;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import figures.Figure;
 import figures.Fox;
 import figures.Goose;
-import gameFild.Cell;
-import gameFild.LogicGameField;
 import graphics.ConsoleOutputType;
 import process.GameProcess;
-
-import java.io.File;
 import java.io.IOException;
-import java.util.Map;
-import java.util.TreeSet;
 
 
 public class GameService {
@@ -50,13 +42,31 @@ public class GameService {
             f.getPossibleMoves().clear();
             f.getPossibleBeat().clear();
         }
+        /*try(FileWriter fw = new FileWriter("src/main/java/saveGame"))
+        {
+            ObjectMapper objectMapper = new ObjectMapper();
+            String json = objectMapper.writeValueAsString(gameProcess);
+            //System.out.println(json);
+            fw.write(json);
+        }
+        catch(IOException ex){
+            System.out.println(ex.getMessage());
+        }*/
 
         ObjectMapper objectMapper = new ObjectMapper();
-
         String json = objectMapper.writeValueAsString(gameProcess);
         System.out.println(json);
 
         GameProcess gp = objectMapper.readValue(json, GameProcess.class);
+        for (Goose g :
+                gp.getGameField().getGeese()) {
+            System.out.println(g + " " + g.getCell());
+        }
+        for (Fox f :
+                gp.getGameField().getFoxes()) {
+            System.out.println(f + " " + f.getCell());
+        }
+        System.out.println(gp.getGameField().getCells());
         //fieldService.printField(gp.getGameField(), ConsoleOutputType.NONE);
     }
 }

@@ -1,6 +1,10 @@
 package process;
 
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import gameFild.Cell;
 import gameFild.LogicGameField;
+
+import java.util.Set;
 
 public class GameProcess {
     private LogicGameField gameField;
@@ -46,5 +50,12 @@ public class GameProcess {
 
     public void setGeeseWin(boolean geeseWin) {
         this.geeseWin = geeseWin;
+    }
+
+    @JsonAnySetter
+    public void desGraph(String s, Set<Cell> set){
+        Cell cell = new Cell(s);
+        cell.setAdjCell(set);
+        getGameField().getCells().add(cell);
     }
 }

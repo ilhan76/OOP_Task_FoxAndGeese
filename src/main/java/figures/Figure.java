@@ -2,11 +2,14 @@ package figures;
 
 import gameFild.Cell;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public interface Figure {
-    //Cell<Figure> getCurrentCell();
-    //void setCurrentCell(Cell<Figure> cell);
-    ArrayList<Cell<Figure>> getPossibleMoves();
-    void setPossibleMoves(ArrayList<Cell<Figure>> newSet);
+    List<Cell> getPossibleMoves();
+    void setPossibleMoves(List<Cell> newSet);
+    Cell getCell();
+    void setCell(Cell cell);
+    //TODO: добавить ссылку на клетку
+    //TODO: возможно удалить список ходов
 }

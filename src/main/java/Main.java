@@ -8,14 +8,33 @@ import process.GameProcess;
 import services.FieldService;
 import services.GameService;
 
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 public class Main {
 
 
     public static void main(String[] args) throws IOException {
+       /* try(FileReader reader = new FileReader("src/main/java/saveGame"))
+        {
+            Scanner scn = new Scanner(reader);
+            StringBuilder json = new StringBuilder();
+            while(scn.hasNext()){
+                //System.out.print(scn.next());
+                json.append(scn.next());
+            }
+            ObjectMapper objectMapper = new ObjectMapper();
+            GameProcess gameProcess = objectMapper.readValue(String.valueOf(json), GameProcess.class);
+            GameService gameService = new GameService();
+            gameService.startRandomGameProcess(gameProcess);
+        }
+        catch(IOException ex){
+            System.out.println(ex.getMessage());
+        }*/
+
         int[][] matrix = {
                 {0, 0, 1, 1, 1, 0, 0},
                 {0, 0, 1, 1, 1, 0, 0},
@@ -25,18 +44,9 @@ public class Main {
                 {0, 0, 2, 2, 2, 0, 0},
                 {0, 0, 2, 2, 2, 0, 0}
         };
-
         FieldService fs = new FieldService();
         LogicGameField gameField = fs.makeGameField(matrix);
         GameService gameService = new GameService();
         gameService.startRandomGameProcess(new GameProcess(gameField));
-
-
-        //Map<Integer, Figure> figureMap = new HashMap<>();
-        //figureMap.put(1, new Fox());
-        //figureMap.put(2, new Goose());
-        //ObjectMapper objectMapper = new ObjectMapper();
-        //String json = objectMapper.writeValueAsString(figureMap);
-        //System.out.println(json);
     }
 }

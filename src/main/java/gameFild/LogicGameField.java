@@ -1,40 +1,51 @@
 package gameFild;
 
+
+import com.fasterxml.jackson.annotation.JsonAnySetter;
 import figures.Figure;
 import figures.Fox;
 import figures.Goose;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 
-public class LogicGameField extends Graph<Figure>{
-    private  HashMap<Figure, Cell<Figure>> cellByFigure = new HashMap<>();
-    private  ArrayList<Goose> geese = new ArrayList<>();
-    private  ArrayList<Fox> foxes = new ArrayList<>();
+public class LogicGameField extends Graph{
+    private  List<Goose> geese = new ArrayList<>();
+    private  List<Fox> foxes = new ArrayList<>();
 
     public LogicGameField(){}
 
-    public ArrayList<Goose> getGeese() {
+    public List<Goose> getGeese() {
         return geese;
     }
 
-    public ArrayList<Fox> getFoxes() {
+    public List<Fox> getFoxes() {
         return foxes;
     }
 
-    public HashMap<Figure, Cell<Figure>> getCellByFigure() {
-        return cellByFigure;
-    }
-
-    public void setCellByFigure(HashMap<Figure, Cell<Figure>> cellByFigure) {
-        this.cellByFigure = cellByFigure;
-    }
-
-    public void setGeese(ArrayList<Goose> geese) {
+    public void setGeese(List<Goose> geese) {
         this.geese = geese;
     }
 
-    public void setFoxes(ArrayList<Fox> foxes) {
+    public void setFoxes(List<Fox> foxes) {
         this.foxes = foxes;
+    }
+
+    /*@JsonAnySetter
+    public void putCellByFigure(String cell, Figure figure){
+        *//*String[] strings = cell.split(" ");
+        if (strings[0].equals("Fox")) cellByFigure.put(new Fox(), cell);
+        else if (strings[0].equals("Goose")) cellByFigure.put(new Goose(), cell);*//*
+
+        String[] str = cell.split(" ");
+        for (String s : str) {
+            Cell c = new Cell(s);
+            //cellByFigure.put(figure, c);
+        }
+    }*/
+    @JsonAnySetter
+    public void desGraph(String s, Set<Cell> set){
+        Cell cell = new Cell(s);
+        cell.setAdjCell(set);
+        cells.add(cell);
     }
 }

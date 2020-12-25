@@ -1,29 +1,31 @@
 package gameFild;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
-
+import java.util.Set;
 import java.util.TreeSet;
 
-public class Cell<Figure> implements Comparable<Cell<Figure>> {
-    private Figure figure;
-    private final int y;
-    private final char x;
+public class Cell implements Comparable<Cell> {
+    private  int y;
+    private  char x;
     @JsonIgnore
-    private TreeSet<Cell<Figure>> adjCell = new TreeSet<>();
+    private Set<Cell> adjCell = new TreeSet<>();
 
-    public Cell(Figure figure, char x, int y) {
-        this.figure = figure;
+    public Cell(char x, int y) {
         this.y = y;
         this.x = x;
     }
 
-    /*public Cell(String json){
+    public Cell(String json){
+        //TODO: парсинг строки
+        String[] strings = json.split(" ");
+        this.y = Integer.parseInt(strings[0]);
+        this.x = (strings[1]).charAt(0);
+    }
 
-    }*/
+    public Cell(){}
 
-    void addAdjVertex(Cell<Figure> cell, TreeSet<Cell<Figure>> vertices) {
-        for (Cell<Figure> v :
+    void addAdjVertex(Cell cell, Set<Cell> vertices) {
+        for (Cell v :
                 vertices) {
             if (v.equals(cell)){
                 adjCell.add(v);
@@ -33,19 +35,11 @@ public class Cell<Figure> implements Comparable<Cell<Figure>> {
         adjCell.add(cell);
     }
 
-    public Figure getFigure() {
-        return figure;
-    }
-
-    public void setFigure(Figure figure) {
-        this.figure = figure;
-    }
-
-    public TreeSet<Cell<Figure>> getAdjCell() {
+    public Set<Cell> getAdjCell() {
         return adjCell;
     }
 
-    public void setAdjCell(TreeSet<Cell<Figure>> adjCell) {
+    public void setAdjCell(Set<Cell> adjCell) {
         this.adjCell = adjCell;
     }
 
@@ -68,24 +62,20 @@ public class Cell<Figure> implements Comparable<Cell<Figure>> {
 
     @Override
     public int compareTo(Cell o) {
-        return ("|" + y + "" + x + "|" /*+ figureToString()*/).compareTo("|" + o.y + "" + o.x + "|" /*+ o.figureToString()*/);
+        return ("|" + y + "" + x + "|").compareTo("|" + o.y + "" + o.x + "|");
     }
     @Override
     public boolean equals(Object obj) {
         if (obj == null || obj.getClass() != this.getClass()) {
             return false;
         } else {
-            Cell<Figure> cell = (Cell<Figure>) obj;
+            Cell cell = (Cell) obj;
             return this.y == cell.y && this.x == cell.x;
         }
     }
 
     @Override
     public String toString() {
-        return "Cell{" +
-                "figure=" + figure +
-                ", y=" + y +
-                ", x=" + x +
-                '}';
+        return y + " " + x;
     }
 }

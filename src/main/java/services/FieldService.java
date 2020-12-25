@@ -9,6 +9,7 @@ import gameFild.Cell;
 import gameFild.LogicGameField;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class FieldService {
 
@@ -18,25 +19,20 @@ public class FieldService {
         for (int i = 1; i < fieldSize; i++) {
             for (char j = 'B'; j < 'H'; j++) {
                 Figure figure = chooseFigure(matrix[i][(j - 66)]);
-                Cell<Figure> cell1 = new Cell<>(figure, (char) (j - 1), i);
-                if (figure != null && !gameField.getCellByFigure().containsValue(cell1)){
-                    gameField.getCellByFigure().put(figure, cell1);
-                }
+                Cell cell1 = new Cell((char) (j - 1), i);
+                if (figure != null) addFigure(gameField, figure, cell1);
+
                 figure = chooseFigure(matrix[i][(j - 65)]);
-                Cell<Figure> cell2 = new Cell<>(figure, j, i);
-                if (figure != null && !gameField.getCellByFigure().containsValue(cell2)){
-                    gameField.getCellByFigure().put(figure, cell2);
-                }
+                Cell cell2 = new Cell(j, i);
+                if (figure != null) addFigure(gameField, figure, cell2);
+
                 figure = chooseFigure(matrix[i - 1][(j - 66)]);
-                Cell<Figure> cell3 = new Cell<>(figure, (char) (j - 1), i - 1);
-                if (figure != null && !gameField.getCellByFigure().containsValue(cell3)){
-                    gameField.getCellByFigure().put(figure, cell3);
-                }
+                Cell cell3 = new Cell((char) (j - 1), i - 1);
+                if (figure != null) addFigure(gameField, figure, cell3);
+
                 figure = chooseFigure(matrix[i - 1][(j - 65)]);
-                Cell<Figure> cell4 = new Cell<>(figure, j, i - 1);
-                if (figure != null && !gameField.getCellByFigure().containsValue(cell4)){
-                    gameField.getCellByFigure().put(figure, cell4);
-                }
+                Cell cell4 = new Cell(j, i - 1);
+                if (figure != null) addFigure(gameField, figure, cell4);
 
                 gameField.addEdge(cell1, cell2);
                 gameField.addEdge(cell2, cell1);
@@ -55,17 +51,31 @@ public class FieldService {
         int[] delY = {0, 5, 1, 6};
         for (int y : delY) {
             for (char x : delX) {
-                gameField.remove(new Cell<Figure>(null, x, y));
-            }
-        }
-        for (Cell<Figure> c :
-                gameField.getCells()) {
-            if (c.getFigure() != null) {
-                if (c.getFigure().getClass() == Fox.class) gameField.getFoxes().add((Fox) c.getFigure());
-                else gameField.getGeese().add((Goose) c.getFigure());
+                gameField.remove(new Cell(x, y));
             }
         }
         return gameField;
+    }
+
+    private void addFigure(LogicGameField gf, Figure figure, Cell cell){
+        figure.setCell(cell);
+        if (figure.getClass() == Fox.class && !gf.getFoxes().contains(figure)){
+            System.out.println(figure + " " + figure.getCell());
+            System.out.println(cell);
+            gf.getFoxes().add((Fox) figure);
+        }else if (figure.getClass() == Goose.class && !gf.getGeese().contains(figure)){
+            System.out.println(figure + " " + figure.getCell());
+            gf.getGeese().add((Goose) figure);
+        }
+    }
+    private Figure findFigure(LogicGameField gf, Cell c){
+        for (Figure f : gf.getGeese()) {
+            if (c.getX() == f.getCell().getX() && c.getY() == f.getCell().getY()) return f;
+        }
+        for (Figure f : gf.getFoxes()) {
+            if (c.getX() == f.getCell().getX() && c.getY() == f.getCell().getY()) return f;
+        }
+        return null;
     }
 
     private Figure chooseFigure(int i) {
@@ -77,7 +87,7 @@ public class FieldService {
     public void printField(LogicGameField gameField, ConsoleOutputType type) {
         int counter = 0;
         System.out.println("==============================");
-        for (Cell<Figure> c :
+        for (Cell c :
                 gameField.getCells()) {
             if (c.getX() == 'C' && (c.getY() == 0 || c.getY() == 1 || c.getY() == 5 || c.getY() == 6)){
                 System.out.print("||||||");
@@ -107,11 +117,11 @@ public class FieldService {
             else
                 System.out.print("\u001B[47m");
 
-            if (c.getFigure() == null) System.out.print("   ");
+            if (findFigure(gameField, c) == null) System.out.print("   ");
             else {
-                if (c.getFigure().getClass() == Goose.class) System.out.print("\033[1;92m");
+                if (findFigure(gameField, c).getClass() == Goose.class) System.out.print("\033[1;92m");
                 else System.out.print("\033[1;91m");
-                System.out.printf(" %s ", c.getFigure().getClass() == Fox.class ? 'F' : 'G');
+                System.out.printf(" %s ", findFigure(gameField, c).getClass() == Fox.class ? 'F' : 'G');
             }
             System.out.print("\033[0;150m");
 
@@ -133,14 +143,14 @@ public class FieldService {
         System.out.println("===================================");
     }
 
-    private boolean canBeatCell(ArrayList<Fox> foxes, Cell<Figure> cell){
+    private boolean canBeatCell(List<Fox> foxes, Cell cell){
         for (Fox f :
                 foxes) {
             if (f.getPossibleBeat().containsKey(cell)) return true;
         }
         return false;
     }
-    private boolean canMoveCell(ArrayList<Fox> foxes, Cell<Figure> cell){
+    private boolean canMoveCell(List<Fox> foxes, Cell cell){
         for (Fox f :
                 foxes) {
             if (f.getPossibleMoves().contains(cell)) return true;
@@ -148,7 +158,7 @@ public class FieldService {
         return false;
     }
 
-    private boolean canGooseMoveCell(ArrayList<Goose> geese, Cell<Figure> cell){
+    private boolean canGooseMoveCell(List<Goose> geese, Cell cell){
         for (Goose g :
                 geese) {
             if (g.getPossibleMoves().contains(cell)) return true;
